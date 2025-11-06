@@ -8,8 +8,8 @@ function setClasses() {
   const div_line = `.vertical-division-line {align-self: stretch; border-right: 1px solid #aaafff}`;
 
   // Dynamic Classes
-  const virtualization_wrapper = `.virtualization_wrapper {position: relative; width: 100%; height: 100%;}`;
-  const sticky_content_wrapper = `.sticky_content_wrapper {position: sticky; top: 0;left: 0; background-color: #121212; width: 100%; height: 100%; overflow: hidden; font-size: 16px; display: flex; flex-direction: row; gap: 0; font-family: monospace;} .sticky_content_wrapper > div { padding: 8px 0; display: flex; flex-direction: column; gap: 4px; align-self: stretch;  }`;
+  const virtualization_wrapper = `.virtualization_wrapper { position: relative; width: 100%; height: 100%;}`;
+  const sticky_content_wrapper = `.sticky_content_wrapper { position: sticky; top: 0;left: 0; background-color: #121212; width: 100%; height: 100%; overflow: hidden; font-size: 16px; display: flex; flex-direction: row; gap: 0; font-family: monospace;} .sticky_content_wrapper > div { padding: 8px 4px; display: flex; flex-direction: column; gap: 4px; align-self: stretch;  }`;
 
   const numberContainerClass = `.number-container-container { align-items: center; justify-content: space-between; min-width: 40px; max-width: 60px; text-align: right; }`;
   const number_span = '.number_span { color: #88bbff; }';
@@ -37,10 +37,10 @@ function setClasses() {
 class Editor {
   parentId: string;
   initialized: boolean = false;
-  getCodeOn: 'update' | 'manual' | 'timed' = 'manual';
+  getCodeOn: 'onChange' | 'manual' | 'timed' = 'manual';
   code: string = '';
   totalLinesInView: number = 0;
-  totalCodeLines: number = 1000;
+  totalCodeLines: number = 10001;
   numberSpanElements: HTMLSpanElement[] = [];
 
   constructor(parentId: string, getCode: (code: string) => void) {
@@ -159,15 +159,23 @@ class Editor {
 
     userProvidedParentElement.addEventListener('scroll', (e) => {
       const scrollTop = (e.target as HTMLElement).scrollTop;
-      this.updateNumbers(
-        Math.round(scrollTop / (DummySpanHeight + ContentDivGap) || 1)
+      const lineHeight = DummySpanHeight + ContentDivGap;
+      const maxStartIndex = Math.max(
+        1,
+        this.totalCodeLines - this.totalLinesInView + 1
       );
+      const firstVisibleLine = Math.min(
+        Math.floor(scrollTop / lineHeight) + 1,
+        maxStartIndex
+      );
+
+      this.updateNumbers(firstVisibleLine);
     });
   }
 
   updateNumbers(startFrom: number) {
     this.numberSpanElements.forEach((item, idx) => {
-      item.innerHTML = (startFrom + idx).toString();
+      item.textContent = (startFrom + idx).toString();
     });
   }
 
