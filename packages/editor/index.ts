@@ -9,14 +9,16 @@ function setClasses() {
 
   // Dynamic Classes
   const virtualization_wrapper = `.virtualization_wrapper { position: relative; width: 100%;}`;
-  const sticky_content_wrapper = `.sticky_content_wrapper { position: sticky; top: 0;left: 0; background-color: #121212; width: 100%; height: 100%; overflow: hidden; font-size: 16px; display: flex; flex-direction: row; gap: 0; font-family: monospace;} .sticky_content_wrapper > div { padding: 8px 4px; display: flex; flex-direction: column; gap: 4px; align-self: stretch; align-items: flex-start; justify-content: flex-start;  }`;
+  const sticky_content_wrapper = `.sticky_content_wrapper { position: sticky; top: 0;left: 0; background-color: #121212; width: 100%; height: 100%; overflow: hidden; font-size: 15px; display: flex; flex-direction: row; gap: 0; font-family: monospace;} 
+  .sticky_content_wrapper > div { padding: 4px 4px; display: flex; flex-direction: column; gap: 4px; align-self: stretch; align-items: flex-start; justify-content: flex-start;  }`;
 
-  const numberContainerClass = `.number-container-container { align-items: center; justify-content: space-between; min-width: 40px; max-width: 60px; text-align: right; }`;
-  const number_span = '.number_span { color: #88bbff; width: 100%; }';
+  const numberContainerClass = `.number-container-container { align-items: center; min-width: 40px; max-width: 60px; text-align: right; }`;
+  const number_span =
+    '.number_span { color: #88bbff; width: 100%; display: block; }';
   const dummy_number_span = `.dummy_number_span {opacity: 0; position: absolute; top: 0; left: 0;}`;
 
-  const editorContainerClass = `.editor-container-class { flex: 1; font-size: 14px }`;
-  const code_line = `.code-line { width: 100%; flex: 1;cursor: text; transition: all 0.05s;} .code-line:hover {background-color: #151515}`;
+  const editorContainerClass = `.editor-container-class { flex: 1; color: white; }`;
+  const code_line = `.code-line { width: 100%;cursor: text; transition: all 0.05s;} .code-line:hover {background-color: #151515}`;
 
   styles.innerHTML += virtualization_wrapper;
 
@@ -41,7 +43,6 @@ class Editor {
   padY: number = 0;
 
   parentId: string;
-  initialized: boolean = false;
   getCodeOn: 'onChange' | 'manual' | 'timed' = 'manual';
   code: string = '';
   totalLinesInView: number = 0;
@@ -57,9 +58,6 @@ class Editor {
   }
 
   initialize() {
-    if (this.initialized) return;
-    this.initialized = true;
-
     setClasses();
 
     this.virtualization_container = document.createElement('div');
@@ -143,9 +141,12 @@ class Editor {
 
       span.classList.add('number_span');
       span.style.height = dummySpanHeightStr;
+      span.style.lineHeight = dummySpanHeightStr;
 
       code_line_div.classList.add('code-line');
       code_line_div.style.height = dummySpanHeightStr;
+      code_line_div.style.lineHeight = dummySpanHeightStr;
+      code_line_div.innerHTML = `<span>height</span>`;
 
       code_div.insertAdjacentElement('beforeend', code_line_div);
       number_div.insertAdjacentElement('beforeend', span);
