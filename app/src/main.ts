@@ -1,4 +1,4 @@
 import './style.css';
 import initEditor from '@packages/editor';
 
-initEditor('app');
+initEditor('editor');
