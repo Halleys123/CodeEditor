@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./",
+    "paths": {
+      "@editor/core": ["packages/core/src/index.ts"],
+      "@editor/lang": ["packages/lang/src/index.ts"],
+      "@editor/editor": ["packages/editor/src/index.ts"]
+    }
+  }
+}
