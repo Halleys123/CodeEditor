@@ -1,3 +1,5 @@
+import ClassHandler from './classesApplier';
+
 function setClasses() {
   let styles = document.querySelector('style');
   if (!styles) {
@@ -18,7 +20,7 @@ function setClasses() {
   const dummy_number_span = `.dummy_number_span {opacity: 0; position: absolute; top: 0; left: 0;}`;
 
   const editorContainerClass = `.editor-container-class { flex: 1; color: white; }`;
-  const code_line = `.code-line { width: 100%;cursor: text; transition: all 0.05s;} .code-line:hover {background-color: #151515}`;
+  const code_line = `.code-line { width: 100%; cursor: text; transition: all 0.05s;} .code-line:hover {background-color: #151515}`;
 
   styles.innerHTML += virtualization_wrapper;
 
@@ -199,6 +201,8 @@ class Editor {
 
 function initEditor(parentId: string) {
   const editor = new Editor(parentId, (code: string) => {});
+  const classhandler = new ClassHandler();
+
   editor.initialize();
   editor.updateNumbers(1);
 }
