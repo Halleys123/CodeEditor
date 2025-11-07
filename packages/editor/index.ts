@@ -11,7 +11,7 @@ class Editor {
   getCodeOn: 'onChange' | 'manual' | 'timed' = 'manual';
   code: string = '';
   totalLinesInView: number = 0;
-  totalCodeLines: number = 80;
+  totalCodeLines: number = 499;
 
   // editor elements
   numberSpanElements: HTMLSpanElement[] = [];
@@ -267,7 +267,7 @@ class Editor {
 }
 
 function initEditor(parentId: string) {
-  const editor = new Editor(parentId, (code: string) => {});
+  const editor = new Editor(parentId, (_code: string) => {});
   const classhandler = new ClassHandler(
     editor.virtualizationWrapperClass,
     editor.stickyContainerClass,
@@ -275,8 +275,15 @@ function initEditor(parentId: string) {
     editor.codeContainerClass,
     editor.numberSpanClass,
     editor.codeLineClass,
-    editor.codeSpanClass
+    editor.verticalDivideClass
   );
+  classhandler.createTheme('my-theme', {
+    VirtualContainerBGColor: '#654645',
+    LineNumberColor: '#fff',
+    CodeLineHoverBGColor: '#604040',
+    VerticalDivideBorderColor: '#656565',
+  });
+  // classhandler.applyTheme('my-theme');
 
   editor.initialize();
   editor.updateNumbers(1);

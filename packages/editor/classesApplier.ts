@@ -103,7 +103,7 @@ class ClassHandler {
     this.CSSVariables = {
       default: {
         [`--${this.sessionUUID}-bg-color`]: '#1e1e1e',
-        [`--${this.sessionUUID}-font-size`]: '14px',
+        [`--${this.sessionUUID}-font-size`]: '15px',
         [`--${this.sessionUUID}-gap`]: '2px',
         [`--${this.sessionUUID}-font-family`]:
           "'Consolas', 'Monaco', 'Courier New', monospace",

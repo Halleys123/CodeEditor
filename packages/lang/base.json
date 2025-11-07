@@ -1,0 +1,47 @@
+{
+  "id": "languageID",
+  "name": "Language Display Name",
+  "keywords": {
+    "if": { "type": "flow-control" },
+    "else": { "type": "flow-control" }
+  },
+  "multiWordKeywords": [
+    { "pattern": ["else", "if"], "role": { "type": "flow-control" } },
+    { "pattern": ["export", "default"], "role": { "type": "declaration" } }
+  ],
+  // For parser
+  "declarationPatterns": [
+    {
+      "role": "function-declaration",
+      "pattern": ["function", "IDENTIFIER", "("],
+      "outputNode": "FunctionDeclaration"
+    },
+    {
+      "role": "function-declaration",
+      "pattern": ["def", "IDENTIFIER", "("],
+      "outputNode": "FunctionDeclaration"
+    },
+    {
+      "role": "function-declaration",
+      "pattern": ["__global__", "void", "IDENTIFIER", "("],
+      "outputNode": "CudaKernelDeclaration"
+    }
+  ],
+  "operators": {
+    "list": [],
+    "precedence": []
+  },
+  "brackets": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "comments": {
+    "singleLine": ["//"],
+    "multiLine": [["/*", "*/"]]
+  },
+  "stringDelimiters": ["'", "\"", "```"],
+  "tokenRules": {},
+  "caseSensitive": true,
+  "scopes": {}
+}
