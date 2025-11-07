@@ -95,8 +95,7 @@ class Editor {
 
     userProvidedElement.style.overflow = 'auto';
 
-    // ! Calculating height of each line later will be used for virtualization
-
+    // * One time claculations no need to reinitialize the program.
     const dummySpanHeightStr = getComputedStyle(dummy_number_span).height;
     this.lineHeight = parseFloat(dummySpanHeightStr) || 1;
     number_div.removeChild(dummy_number_span);
@@ -134,16 +133,8 @@ class Editor {
 
     window.addEventListener('resize', () => {
       const scrollTop = userProvidedElement.scrollTop;
-      const lineHeight = this.lineHeight + this.lineGap;
-      const desiredStartLine = Math.floor(scrollTop / lineHeight) + 1;
-
-      while (number_div.firstChild) {
-        number_div.removeChild(number_div.firstChild);
-      }
-
-      while (code_div.firstChild) {
-        code_div.removeChild(code_div.firstChild);
-      }
+      const previousLineHeight = this.lineHeight + this.lineGap;
+      const desiredStartLine = Math.floor(scrollTop / previousLineHeight) + 1;
 
       this.virtualize(
         userProvidedElement,
@@ -154,8 +145,13 @@ class Editor {
         desiredStartLine
       );
 
-      const lineOffset = Math.max(0, desiredStartLine - 1);
-      userProvidedElement.scrollTop = lineOffset * lineHeight;
+      const safeStart = Math.min(
+        Math.max(1, desiredStartLine),
+        Math.max(1, this.totalCodeLines - this.totalLinesInView + 1)
+      );
+      const lineOffset = Math.max(0, safeStart - 1);
+      const newLineHeight = this.lineHeight + this.lineGap;
+      userProvidedElement.scrollTop = lineOffset * newLineHeight;
     });
   }
 
@@ -167,8 +163,6 @@ class Editor {
     NumberContainer: HTMLDivElement,
     startLine: number = 1
   ) {
-    this.numberSpanElements = [];
-
     const userProvidedElementStyle = getComputedStyle(userProvidedElement);
     const userProvidedElementHeightStr = userProvidedElementStyle.height;
 
@@ -183,6 +177,12 @@ class Editor {
 
     this.totalLinesInView = Math.max(1, Math.floor(computedLinesInView));
 
+    this.adjustLineElements(
+      CodeContainer,
+      NumberContainer,
+      this.totalLinesInView
+    );
+
     VirtualizationWrapper.style.height =
       (
         Math.max(this.totalCodeLines, this.totalLinesInView) *
@@ -190,26 +190,57 @@ class Editor {
         this.padY * 2
       ).toString() + 'px';
 
-    for (let i = 1; i <= this.totalLinesInView; i += 1) {
-      const code_line_div = document.createElement('div');
-      const span = document.createElement('span');
+    this.updateNumbers(startLine);
+  }
 
-      span.classList.add(this.numberSpanClass);
-      span.style.height = this.lineHeight + 'px';
-      span.style.lineHeight = this.lineHeight + 'px';
+  private adjustLineElements(
+    CodeContainer: HTMLDivElement,
+    NumberContainer: HTMLDivElement,
+    desiredCount: number
+  ) {
+    const currentCount = this.numberSpanElements.length;
+    const newLineHeight = `${this.lineHeight}px`;
 
-      code_line_div.classList.add(this.codeLineClass);
-      code_line_div.style.height = this.lineHeight + 'px';
-      code_line_div.style.lineHeight = this.lineHeight + 'px';
-      code_line_div.innerHTML = `<span>height</span>`;
+    if (currentCount > desiredCount) {
+      for (let i = currentCount - 1; i >= desiredCount; i -= 1) {
+        const span = this.numberSpanElements.pop();
+        if (span && span.parentElement === NumberContainer) {
+          NumberContainer.removeChild(span);
+        }
 
-      CodeContainer.insertAdjacentElement('beforeend', code_line_div);
-      NumberContainer.insertAdjacentElement('beforeend', span);
-
-      this.numberSpanElements.push(span);
+        const lastCodeLine = CodeContainer.lastElementChild;
+        if (lastCodeLine) {
+          CodeContainer.removeChild(lastCodeLine);
+        }
+      }
     }
 
-    this.updateNumbers(startLine);
+    if (this.numberSpanElements.length < desiredCount) {
+      for (let i = this.numberSpanElements.length; i < desiredCount; i += 1) {
+        const code_line_div = document.createElement('div');
+        code_line_div.classList.add(this.codeLineClass);
+        code_line_div.innerHTML = `<span>height</span>`;
+
+        const span = document.createElement('span');
+        span.classList.add(this.numberSpanClass);
+
+        CodeContainer.insertAdjacentElement('beforeend', code_line_div);
+        NumberContainer.insertAdjacentElement('beforeend', span);
+
+        this.numberSpanElements.push(span);
+      }
+    }
+
+    this.numberSpanElements.forEach((span) => {
+      span.style.height = newLineHeight;
+      span.style.lineHeight = newLineHeight;
+    });
+
+    Array.from(CodeContainer.children).forEach((child) => {
+      const element = child as HTMLElement;
+      element.style.height = newLineHeight;
+      element.style.lineHeight = newLineHeight;
+    });
   }
 
   updateNumbers(startFrom: number) {
