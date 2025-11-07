@@ -10,4 +10,4 @@ This is a project for a code editor component with dynamic styling capabilities.
 4. `packages/themes`: Contains themes for the code editor component.
 5. `packages/languages`: Contain configuration for compiler of various programming languages. It will be used by core package to provide syntax highlighting and other language-specific features.
 
-![Package Structure](./images/image-1.png)
+   ![Package Structure](./images/Structure_dark.svg)
