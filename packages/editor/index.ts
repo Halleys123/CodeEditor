@@ -126,14 +126,14 @@ class Editor {
     number_div.removeChild(dummy_number_span);
 
     for (let i = 1; i <= Math.round(this.totalLinesInView); i += 1) {
-  const code_line_div = document.createElement('div');
-  const span = document.createElement('span');
+      const code_line_div = document.createElement('div');
+      const span = document.createElement('span');
 
-  span.classList.add(this.numberSpanClass);
-  span.style.height = dummySpanHeightStr;
-  span.style.lineHeight = dummySpanHeightStr;
+      span.classList.add(this.numberSpanClass);
+      span.style.height = dummySpanHeightStr;
+      span.style.lineHeight = dummySpanHeightStr;
 
-  code_line_div.classList.add(this.codeLineClass);
+      code_line_div.classList.add(this.codeLineClass);
       code_line_div.style.height = dummySpanHeightStr;
       code_line_div.style.lineHeight = dummySpanHeightStr;
       code_line_div.innerHTML = `<span>height</span>`;

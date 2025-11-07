@@ -61,6 +61,7 @@ class ClassHandler {
   private AllowedThemeVariables: Set<string>;
   private CSSVariables: Record<string, Record<string, string>>;
   private CSS_StylesRecord: Record<string, Record<string, string>>;
+  private ThemeVariableAliasMap: Record<string, string>;
 
   // Elements in Code Structure, their Classes
   private VirtulizationWrapperClass: string;
@@ -114,22 +115,34 @@ class ClassHandler {
       `--${this.sessionUUID}-vertical-divide-border`,
     ]);
 
+    this.ThemeVariableAliasMap = {
+      VirtualContainerBGColor: 'bg-color',
+      StickyContainerFontSize: 'font-size',
+      StickyContainerGap: 'gap',
+      StickyContainerFontFamily: 'font-family',
+      StickyContainerPadding: 'padding',
+      LineNumberColor: 'line-number-color',
+      CodeLineTransitionTime: 'line-transition-time',
+      CodeLineHoverBGColor: 'line-hover-bg-color',
+      VerticalDivideBorderColor: 'vertical-divide-border',
+    };
+
     this.CSSVariables = {
       default: {
-        [`--${this.sessionUUID}-bg-color`]: '#121212',
-        [`--${this.sessionUUID}-font-size`]: '15px',
-        [`--${this.sessionUUID}-gap`]: '0px',
-        [`--${this.sessionUUID}-font-family`]: 'monospace',
-        [`--${this.sessionUUID}-padding`]: '4px 9px',
-        [`--${this.sessionUUID}-line-number-color`]: '#f0f0f0',
-        [`--${this.sessionUUID}-line-transition-time`]: '0.05s',
-        [`--${this.sessionUUID}-line-hover-bg-color`]: '#212121',
-        [`--${this.sessionUUID}-vertical-divide-border`]: '#545454',
+        [`--${this.sessionUUID}-bg-color`]: '#1e1e1e',
+        [`--${this.sessionUUID}-font-size`]: '14px',
+        [`--${this.sessionUUID}-gap`]: '2px',
+        [`--${this.sessionUUID}-font-family`]:
+          "'Consolas', 'Monaco', 'Courier New', monospace",
+        [`--${this.sessionUUID}-padding`]: '8px 12px',
+        [`--${this.sessionUUID}-line-number-color`]: '#858585',
+        [`--${this.sessionUUID}-line-transition-time`]: '0.1s',
+        [`--${this.sessionUUID}-line-hover-bg-color`]: '#2a2a2a',
+        [`--${this.sessionUUID}-vertical-divide-border`]: '#3e3e3e',
       },
     };
 
     this.CSS_StylesRecord = {
-      // VirtulizationWrapper
       [`.${this.VirtulizationWrapperClass}`]: {
         position: 'relative',
         width: '100%',
@@ -140,7 +153,6 @@ class ClassHandler {
         'box-sizing': 'border-box',
       },
 
-      // StickyContainer
       [`.${this.StickyContainerClass}`]: {
         position: 'sticky',
         top: '0',
@@ -154,7 +166,7 @@ class ClassHandler {
         gap: `var(--${this.sessionUUID}-gap)`,
         'font-family': `var(--${this.sessionUUID}-font-family)`,
       },
-      // Only first and third direct child divs
+
       [`.${this.StickyContainerClass} > div:nth-child(1), .${this.StickyContainerClass} > div:nth-child(3)`]:
         {
           padding: `var(--${this.sessionUUID}-padding)`,
@@ -165,28 +177,27 @@ class ClassHandler {
           'align-items': 'flex-start',
           'justify-content': 'flex-start',
         },
-      // NumberContainer
+
       [`.${this.NumberContainerClass}`]: {
         'align-items': 'center',
         'min-width': '40px',
         'max-width': '60px',
+        cursor: 'pointer',
         'text-align': 'right',
       },
 
-      // CodeContainer
       [`.${this.CodeContainerClass}`]: {
         flex: '1',
         color: 'white',
       },
 
-      // NumberSpan (class selector for multiple elements)
       [`.${this.NumberSpanClass}`]: {
         color: `var(--${this.sessionUUID}-line-number-color)`,
         width: '100%',
         display: 'block',
+        'min-width': '30px',
       },
 
-      // CodeLine (class selector for multiple elements)
       [`.${this.CodeLineClass}`]: {
         width: '100%',
         cursor: 'text',
@@ -225,6 +236,37 @@ class ClassHandler {
 
     styles.textContent = cssText;
     document.querySelector('head')?.appendChild(styles);
+  }
+
+  createTheme(themeName: string, overrides: Record<string, string>): void {
+    if (!themeName) {
+      console.error('Theme name is required to create a theme');
+      return;
+    }
+
+    const baseTheme = { ...this.CSSVariables.default };
+
+    for (const [alias, value] of Object.entries(overrides)) {
+      const baseKey = this.ThemeVariableAliasMap[alias];
+
+      if (!baseKey) {
+        console.warn(`Ignoring unknown theme variable alias: ${alias}`);
+        continue;
+      }
+
+      const variableName = `--${this.sessionUUID}-${baseKey}`;
+
+      if (!this.AllowedThemeVariables.has(variableName)) {
+        console.warn(
+          `Skipping disallowed theme variable assignment for alias: ${alias}`
+        );
+        continue;
+      }
+
+      baseTheme[variableName] = value;
+    }
+
+    this.CSSVariables[themeName] = baseTheme;
   }
 
   applyTheme(ThemeName: string) {
