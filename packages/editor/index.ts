@@ -196,8 +196,7 @@ function initEditor(parentId: string) {
     editor.codeContainerClass,
     editor.numberSpanClass,
     editor.codeLineClass,
-    editor.codeSpanClass,
-    editor.verticalDivideClass
+    editor.codeSpanClass
   );
 
   classhandler.applyTheme('default');

@@ -39,21 +39,6 @@
 
 // Generates classes based on description by the user and allows to modify some of them and then apply them
 class ClassHandler {
-  // Parent container classes
-  private VirtulizationWrapperClasses: string; // Have a virtual height according to [total lines of code * line height]
-  private StickyContainerClasses: string; // Have height according to the user provided parent
-  // Main Content containers - Both should have same padding, gap and height
-  private NumberContainerClasses: string; // For numbers
-  private CodeContainerClasses: string; // For actual code
-  // Classes of spans storing numbers
-  private NumberSpanClasses: string;
-  // Classes of div storing a line of code
-  // # Actual code classes will be decided later on
-  private CodeLineClasses: string;
-  private CodeSpanClasses: string; // ! Will be thought later just for reference as different keywords, parameters etc may have differnt colors
-  // Extra classes
-  private VerticalDivideClasses: string;
-
   // Other properties
   private sessionUUID: string;
 
@@ -64,14 +49,13 @@ class ClassHandler {
   private ThemeVariableAliasMap: Record<string, string>;
 
   // Elements in Code Structure, their Classes
-  private VirtulizationWrapperClass: string;
-  private StickyContainerClass: string;
-  private NumberContainerClass: string;
-  private CodeContainerClass: string;
-  private NumberSpanClass: string;
-  private CodeLineClass: string;
-  private CodeSpanClass: string;
-  private VerticalDivideClass: string;
+  private VirtulizationWrapperClassName: string;
+  private StickyContainerClassName: string;
+  private NumberContainerClassName: string;
+  private CodeContainerClassName: string;
+  private NumberSpanClassName: string;
+  private CodeLineClassName: string;
+  private VerticalDivideClassName: string;
 
   constructor(
     VirtulizationWrapperClass: string,
@@ -80,26 +64,15 @@ class ClassHandler {
     CodeContainerClass: string,
     NumberSpanClass: string,
     CodeLineClass: string,
-    CodeSpanClass: string,
     VerticalDivideClass: string
   ) {
-    this.VirtulizationWrapperClass = VirtulizationWrapperClass;
-    this.StickyContainerClass = StickyContainerClass;
-    this.NumberContainerClass = NumberContainerClass;
-    this.CodeContainerClass = CodeContainerClass;
-    this.NumberSpanClass = NumberSpanClass;
-    this.CodeLineClass = CodeLineClass;
-    this.CodeSpanClass = CodeSpanClass;
-    this.VerticalDivideClass = VerticalDivideClass;
-
-    this.VirtulizationWrapperClasses = '';
-    this.StickyContainerClasses = '';
-    this.NumberContainerClasses = '';
-    this.CodeContainerClasses = '';
-    this.NumberSpanClasses = '';
-    this.CodeLineClasses = '';
-    this.CodeSpanClasses = '';
-    this.VerticalDivideClasses = '';
+    this.VirtulizationWrapperClassName = VirtulizationWrapperClass;
+    this.StickyContainerClassName = StickyContainerClass;
+    this.NumberContainerClassName = NumberContainerClass;
+    this.CodeContainerClassName = CodeContainerClass;
+    this.NumberSpanClassName = NumberSpanClass;
+    this.CodeLineClassName = CodeLineClass;
+    this.VerticalDivideClassName = VerticalDivideClass;
 
     this.sessionUUID = 'a' + crypto.randomUUID().toString();
 
@@ -143,17 +116,17 @@ class ClassHandler {
     };
 
     this.CSS_StylesRecord = {
-      [`.${this.VirtulizationWrapperClass}`]: {
+      [`.${this.VirtulizationWrapperClassName}`]: {
         position: 'relative',
         width: '100%',
       },
-      [`.${this.VirtulizationWrapperClass} *`]: {
+      [`.${this.VirtulizationWrapperClassName} *`]: {
         margin: '0',
         padding: '0',
         'box-sizing': 'border-box',
       },
 
-      [`.${this.StickyContainerClass}`]: {
+      [`.${this.StickyContainerClassName}`]: {
         position: 'sticky',
         top: '0',
         left: '0',
@@ -167,7 +140,7 @@ class ClassHandler {
         'font-family': `var(--${this.sessionUUID}-font-family)`,
       },
 
-      [`.${this.StickyContainerClass} > div:nth-child(1), .${this.StickyContainerClass} > div:nth-child(3)`]:
+      [`.${this.StickyContainerClassName} > div:nth-child(1), .${this.StickyContainerClassName} > div:nth-child(3)`]:
         {
           padding: `var(--${this.sessionUUID}-padding)`,
           display: 'flex',
@@ -178,7 +151,7 @@ class ClassHandler {
           'justify-content': 'flex-start',
         },
 
-      [`.${this.NumberContainerClass}`]: {
+      [`.${this.NumberContainerClassName}`]: {
         'align-items': 'center',
         'min-width': '40px',
         'max-width': '60px',
@@ -186,28 +159,28 @@ class ClassHandler {
         'text-align': 'right',
       },
 
-      [`.${this.CodeContainerClass}`]: {
+      [`.${this.CodeContainerClassName}`]: {
         flex: '1',
         color: 'white',
       },
 
-      [`.${this.NumberSpanClass}`]: {
+      [`.${this.NumberSpanClassName}`]: {
         color: `var(--${this.sessionUUID}-line-number-color)`,
         width: '100%',
         display: 'block',
         'min-width': '30px',
       },
 
-      [`.${this.CodeLineClass}`]: {
+      [`.${this.CodeLineClassName}`]: {
         width: '100%',
         cursor: 'text',
         transition: `all var(--${this.sessionUUID}-line-transition-time)`,
       },
-      [`.${this.CodeLineClass}:hover`]: {
+      [`.${this.CodeLineClassName}:hover`]: {
         'background-color': `var(--${this.sessionUUID}-line-hover-bg-color)`,
       },
       // VerticalDivide
-      [`.${this.VerticalDivideClass}`]: {
+      [`.${this.VerticalDivideClassName}`]: {
         'align-self': 'stretch',
         'border-right': `1px solid var(--${this.sessionUUID}-vertical-divide-border)`,
       },
