@@ -8,8 +8,8 @@ function setClasses() {
   const div_line = `.vertical-division-line {align-self: stretch; border-right: 1px solid #aaafff}`;
 
   // Dynamic Classes
-  const virtualization_wrapper = `.virtualization_wrapper { position: relative; width: 100%;}`;
-  const sticky_content_wrapper = `.sticky_content_wrapper { position: sticky; top: 0;left: 0; background-color: #121212; width: 100%; height: 100%; overflow: hidden; font-size: 15px; display: flex; flex-direction: row; gap: 0; font-family: monospace;} 
+  const virtualization_wrapper = `.virtualization_wrapper { position: relative; width: 100%; }  .virtualization_wrapper * { margin: 0; padding: 0; box-sizing: border-box; }`;
+  const sticky_content_wrapper = `.sticky_content_wrapper { position: sticky; top: 0;left: 0; background-color: #121212; width: 100%; overflow: hidden; font-size: 15px; display: flex; flex-direction: row; gap: 0; font-family: monospace;} 
   .sticky_content_wrapper > div { padding: 4px 4px; display: flex; flex-direction: column; gap: 4px; align-self: stretch; align-items: flex-start; justify-content: flex-start;  }`;
 
   const numberContainerClass = `.number-container-container { align-items: center; min-width: 40px; max-width: 60px; text-align: right; }`;
