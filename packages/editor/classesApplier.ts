@@ -100,7 +100,7 @@ class ClassHandler {
     this.CodeSpanClasses = '';
     this.VerticalDivideClasses = '';
 
-    this.sessionUUID = crypto.randomUUID().toString();
+    this.sessionUUID = 'a' + crypto.randomUUID().toString();
 
     this.AllowedThemeVariables = new Set([
       `--${this.sessionUUID}-bg-color`,
@@ -120,7 +120,7 @@ class ClassHandler {
         [`--${this.sessionUUID}-font-size`]: '15px',
         [`--${this.sessionUUID}-gap`]: '0px',
         [`--${this.sessionUUID}-font-family`]: 'monospace',
-        [`--${this.sessionUUID}-padding`]: '0px',
+        [`--${this.sessionUUID}-padding`]: '4px 9px',
         [`--${this.sessionUUID}-line-number-color`]: '#f0f0f0',
         [`--${this.sessionUUID}-line-transition-time`]: '0.05s',
         [`--${this.sessionUUID}-line-hover-bg-color`]: '#212121',
@@ -154,15 +154,17 @@ class ClassHandler {
         gap: `var(--${this.sessionUUID}-gap)`,
         'font-family': `var(--${this.sessionUUID}-font-family)`,
       },
-      [`.${this.StickyContainerClass} > div`]: {
-        padding: `var(--${this.sessionUUID}-padding)`,
-        display: 'flex',
-        'flex-direction': 'column',
-        gap: `var(--${this.sessionUUID}-gap)`,
-        'align-self': 'stretch',
-        'align-items': 'flex-start',
-        'justify-content': 'flex-start',
-      },
+      // Only first and third direct child divs
+      [`.${this.StickyContainerClass} > div:nth-child(1), .${this.StickyContainerClass} > div:nth-child(3)`]:
+        {
+          padding: `var(--${this.sessionUUID}-padding)`,
+          display: 'flex',
+          'flex-direction': 'column',
+          gap: `var(--${this.sessionUUID}-gap)`,
+          'align-self': 'stretch',
+          'align-items': 'flex-start',
+          'justify-content': 'flex-start',
+        },
       // NumberContainer
       [`.${this.NumberContainerClass}`]: {
         'align-items': 'center',

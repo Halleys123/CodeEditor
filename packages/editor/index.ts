@@ -1,4 +1,5 @@
 import ClassHandler from './classesApplier';
+import { generateSecureToken } from './utils';
 
 class Editor {
   // Properties
@@ -26,15 +27,8 @@ class Editor {
   codeSpanClass: string;
   verticalDivideClass: string;
 
-  private generateClassSuffix(length: number = 8): string {
-    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-    const bytes = new Uint8Array(length);
-    crypto.getRandomValues(bytes);
-    return Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join('');
-  }
-
-  private createClassName(base: string): string {
-    return `${base}-${this.generateClassSuffix()}`;
+  private createClassName(): string {
+    return generateSecureToken();
   }
 
   constructor(parentId: string, getCode: (code: string) => void) {
@@ -42,40 +36,37 @@ class Editor {
     this.virtualization_container = null;
 
     // Generate unique classes for all elements
-  this.virtualizationWrapperClass = this.createClassName('virtualization-wrapper');
-  this.stickyContainerClass = this.createClassName('sticky-container');
-  this.numberContainerClass = this.createClassName('number-container');
-  this.codeContainerClass = this.createClassName('code-container');
-  this.numberSpanClass = this.createClassName('number-span');
-  this.codeLineClass = this.createClassName('code-line');
-  this.codeSpanClass = this.createClassName('code-span');
-  this.verticalDivideClass = this.createClassName('vertical-divide');
+    this.virtualizationWrapperClass = this.createClassName();
+    this.stickyContainerClass = this.createClassName();
+    this.numberContainerClass = this.createClassName();
+    this.codeContainerClass = this.createClassName();
+    this.numberSpanClass = this.createClassName();
+    this.codeLineClass = this.createClassName();
+    this.codeSpanClass = this.createClassName();
+    this.verticalDivideClass = this.createClassName();
   }
 
   initialize() {
     this.virtualization_container = document.createElement('div');
-    this.virtualization_container.classList.add('virtualization_wrapper');
-    this.virtualization_container.classList.add(this.virtualizationWrapperClass);
+    this.virtualization_container.classList.add(
+      this.virtualizationWrapperClass
+    );
 
     const sticky_content_wrapper = document.createElement('div');
-    sticky_content_wrapper.classList.add('sticky_content_wrapper');
     sticky_content_wrapper.classList.add(this.stickyContainerClass);
 
     const number_div = document.createElement('div');
-    number_div.classList.add('number-container-container');
     number_div.classList.add(this.numberContainerClass);
 
     const dummy_number_span = document.createElement('span');
-    dummy_number_span.classList.add('number_span', 'dummy_number_span');
+    dummy_number_span.classList.add('dummy_number_span');
     dummy_number_span.classList.add(this.numberSpanClass);
     dummy_number_span.innerText += '1';
 
     const div_line = document.createElement('div');
-    div_line.classList.add('vertical-division-line');
     div_line.classList.add(this.verticalDivideClass);
 
     const code_div = document.createElement('div');
-    code_div.classList.add('editor-container-class');
     code_div.classList.add(this.codeContainerClass);
 
     this.virtualization_container.insertAdjacentElement(
@@ -135,16 +126,14 @@ class Editor {
     number_div.removeChild(dummy_number_span);
 
     for (let i = 1; i <= Math.round(this.totalLinesInView); i += 1) {
-    const code_line_div = document.createElement('div');
-    const span = document.createElement('span');
+  const code_line_div = document.createElement('div');
+  const span = document.createElement('span');
 
-    span.classList.add('number_span');
-    span.classList.add(this.numberSpanClass);
-    span.style.height = dummySpanHeightStr;
-    span.style.lineHeight = dummySpanHeightStr;
+  span.classList.add(this.numberSpanClass);
+  span.style.height = dummySpanHeightStr;
+  span.style.lineHeight = dummySpanHeightStr;
 
-    code_line_div.classList.add('code-line');
-    code_line_div.classList.add(this.codeLineClass);
+  code_line_div.classList.add(this.codeLineClass);
       code_line_div.style.height = dummySpanHeightStr;
       code_line_div.style.lineHeight = dummySpanHeightStr;
       code_line_div.innerHTML = `<span>height</span>`;
