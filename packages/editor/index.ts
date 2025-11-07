@@ -80,71 +80,44 @@ class Editor {
 
     number_div.insertAdjacentElement('beforeend', dummy_number_span);
 
-    const userProvidedParentElement = document.getElementById(this.parentId);
-    if (!userProvidedParentElement) {
+    const userProvidedElement = document.getElementById(this.parentId);
+    if (!userProvidedElement) {
       console.error(
         `ID Provided has not associated html element: ${this.parentId}`
       );
       return;
     }
 
-    userProvidedParentElement?.insertAdjacentElement(
+    userProvidedElement?.insertAdjacentElement(
       'beforeend',
       this.virtualization_container
     );
 
-    userProvidedParentElement.style.overflow = 'auto';
+    userProvidedElement.style.overflow = 'auto';
 
     // ! Calculating height of each line later will be used for virtualization
 
-    const spanStyles = getComputedStyle(dummy_number_span);
-    const userProvidedParentElementStyle = getComputedStyle(
-      userProvidedParentElement
-    );
-    const ContentDivStyles = getComputedStyle(code_div);
-
-    const dummySpanHeightStr = spanStyles.height;
-
-    const userProvidedParentHeightStr = userProvidedParentElementStyle.height;
-    const ContentDivPaddingYStr = ContentDivStyles.paddingTop;
-    const ContentDivGapStr = ContentDivStyles.gap;
-
+    const dummySpanHeightStr = getComputedStyle(dummy_number_span).height;
     this.lineHeight = parseFloat(dummySpanHeightStr) || 1;
-
-    const PrimaryDivHeight: number =
-      parseFloat(userProvidedParentHeightStr) || 1;
-    this.padY = parseFloat(ContentDivPaddingYStr) || 0;
-    this.lineGap = parseFloat(ContentDivGapStr) || 0;
-
-    sticky_content_wrapper.style.height = userProvidedParentElementStyle.height;
-
-    this.totalLinesInView =
-      (PrimaryDivHeight - 2 * this.padY) / (this.lineHeight + this.lineGap);
-
-    this.updateVirtualHeight();
-
     number_div.removeChild(dummy_number_span);
 
-    for (let i = 1; i <= Math.round(this.totalLinesInView); i += 1) {
-      const code_line_div = document.createElement('div');
-      const span = document.createElement('span');
+    const CodeContainerStyles = getComputedStyle(code_div);
+    const CodeContainerPaddingYStr = CodeContainerStyles.paddingTop;
+    const CodeContainerGapStr = CodeContainerStyles.gap;
 
-      span.classList.add(this.numberSpanClass);
-      span.style.height = dummySpanHeightStr;
-      span.style.lineHeight = dummySpanHeightStr;
+    this.padY = parseFloat(CodeContainerPaddingYStr) || 0;
+    this.lineGap = parseFloat(CodeContainerGapStr) || 0;
 
-      code_line_div.classList.add(this.codeLineClass);
-      code_line_div.style.height = dummySpanHeightStr;
-      code_line_div.style.lineHeight = dummySpanHeightStr;
-      code_line_div.innerHTML = `<span>height</span>`;
+    this.virtualize(
+      userProvidedElement,
+      this.virtualization_container as HTMLDivElement,
+      sticky_content_wrapper,
+      code_div,
+      number_div,
+      1
+    );
 
-      code_div.insertAdjacentElement('beforeend', code_line_div);
-      number_div.insertAdjacentElement('beforeend', span);
-
-      this.numberSpanElements.push(span);
-    }
-
-    userProvidedParentElement.addEventListener('scroll', (e) => {
+    userProvidedElement.addEventListener('scroll', (e: Event) => {
       const scrollTop = (e.target as HTMLElement).scrollTop;
       const lineHeight = this.lineHeight + this.lineGap;
       const maxStartIndex = Math.max(
@@ -158,32 +131,107 @@ class Editor {
 
       this.updateNumbers(firstVisibleLine);
     });
+
+    window.addEventListener('resize', () => {
+      const scrollTop = userProvidedElement.scrollTop;
+      const lineHeight = this.lineHeight + this.lineGap;
+      const desiredStartLine = Math.floor(scrollTop / lineHeight) + 1;
+
+      while (number_div.firstChild) {
+        number_div.removeChild(number_div.firstChild);
+      }
+
+      while (code_div.firstChild) {
+        code_div.removeChild(code_div.firstChild);
+      }
+
+      this.virtualize(
+        userProvidedElement,
+        this.virtualization_container as HTMLDivElement,
+        sticky_content_wrapper,
+        code_div,
+        number_div,
+        desiredStartLine
+      );
+
+      const lineOffset = Math.max(0, desiredStartLine - 1);
+      userProvidedElement.scrollTop = lineOffset * lineHeight;
+    });
   }
 
-  updateNumbers(startFrom: number) {
-    let last: number = Math.min(
-      this.totalCodeLines,
-      Math.round(this.totalLinesInView)
-    );
+  private virtualize(
+    userProvidedElement: HTMLElement,
+    VirtualizationWrapper: HTMLDivElement,
+    StickyContainer: HTMLDivElement,
+    CodeContainer: HTMLDivElement,
+    NumberContainer: HTMLDivElement,
+    startLine: number = 1
+  ) {
+    this.numberSpanElements = [];
 
-    for (let i = 0; i < last; i += 1) {
-      this.numberSpanElements[i].textContent = (i + startFrom).toString();
-    }
-  }
+    const userProvidedElementStyle = getComputedStyle(userProvidedElement);
+    const userProvidedElementHeightStr = userProvidedElementStyle.height;
 
-  updateGetCodeOn(method: 'manual' | 'timed' | 'onChange') {
-    this.getCodeOn = method;
-  }
+    const userProvideElementHeight: number =
+      parseFloat(userProvidedElementHeightStr) || 1;
 
-  updateVirtualHeight() {
-    if (!this.virtualization_container) return;
+    StickyContainer.style.height = userProvidedElementStyle.height;
 
-    this.virtualization_container.style.height =
+    const computedLinesInView =
+      (userProvideElementHeight - 2 * this.padY) /
+      (this.lineHeight + this.lineGap);
+
+    this.totalLinesInView = Math.max(1, Math.floor(computedLinesInView));
+
+    VirtualizationWrapper.style.height =
       (
         Math.max(this.totalCodeLines, this.totalLinesInView) *
           (this.lineHeight + this.lineGap) +
         this.padY * 2
       ).toString() + 'px';
+
+    for (let i = 1; i <= this.totalLinesInView; i += 1) {
+      const code_line_div = document.createElement('div');
+      const span = document.createElement('span');
+
+      span.classList.add(this.numberSpanClass);
+      span.style.height = this.lineHeight + 'px';
+      span.style.lineHeight = this.lineHeight + 'px';
+
+      code_line_div.classList.add(this.codeLineClass);
+      code_line_div.style.height = this.lineHeight + 'px';
+      code_line_div.style.lineHeight = this.lineHeight + 'px';
+      code_line_div.innerHTML = `<span>height</span>`;
+
+      CodeContainer.insertAdjacentElement('beforeend', code_line_div);
+      NumberContainer.insertAdjacentElement('beforeend', span);
+
+      this.numberSpanElements.push(span);
+    }
+
+    this.updateNumbers(startLine);
+  }
+
+  updateNumbers(startFrom: number) {
+    const visibleCount: number = Math.min(
+      this.totalCodeLines,
+      Math.round(this.totalLinesInView)
+    );
+
+    if (visibleCount === 0) {
+      return;
+    }
+
+    const maxStartIndex = Math.max(1, this.totalCodeLines - visibleCount + 1);
+    const safeStart = Math.min(Math.max(1, startFrom), maxStartIndex);
+
+    for (let i = 0; i < visibleCount; i += 1) {
+      this.numberSpanElements[i].textContent = (i + safeStart).toString();
+    }
+  }
+
+  updateGetCodeOn(method: 'manual' | 'timed' | 'onChange') {
+    this.getCodeOn = method;
   }
 }
 
@@ -198,8 +246,6 @@ function initEditor(parentId: string) {
     editor.codeLineClass,
     editor.codeSpanClass
   );
-
-  classhandler.applyTheme('default');
 
   editor.initialize();
   editor.updateNumbers(1);

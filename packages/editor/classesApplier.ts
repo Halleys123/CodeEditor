@@ -58,21 +58,21 @@ class ClassHandler {
   private VerticalDivideClassName: string;
 
   constructor(
-    VirtulizationWrapperClass: string,
-    StickyContainerClass: string,
-    NumberContainerClass: string,
-    CodeContainerClass: string,
-    NumberSpanClass: string,
-    CodeLineClass: string,
-    VerticalDivideClass: string
+    VirtulizationWrapperClassName: string,
+    StickyContainerClassName: string,
+    NumberContainerClassName: string,
+    CodeContainerClassName: string,
+    NumberSpanClassName: string,
+    CodeLineClassName: string,
+    VerticalDivideClassName: string
   ) {
-    this.VirtulizationWrapperClassName = VirtulizationWrapperClass;
-    this.StickyContainerClassName = StickyContainerClass;
-    this.NumberContainerClassName = NumberContainerClass;
-    this.CodeContainerClassName = CodeContainerClass;
-    this.NumberSpanClassName = NumberSpanClass;
-    this.CodeLineClassName = CodeLineClass;
-    this.VerticalDivideClassName = VerticalDivideClass;
+    this.VirtulizationWrapperClassName = VirtulizationWrapperClassName;
+    this.StickyContainerClassName = StickyContainerClassName;
+    this.NumberContainerClassName = NumberContainerClassName;
+    this.CodeContainerClassName = CodeContainerClassName;
+    this.NumberSpanClassName = NumberSpanClassName;
+    this.CodeLineClassName = CodeLineClassName;
+    this.VerticalDivideClassName = VerticalDivideClassName;
 
     this.sessionUUID = 'a' + crypto.randomUUID().toString();
 
@@ -187,6 +187,7 @@ class ClassHandler {
     };
 
     this.applyBaseVariables();
+    this.applyTheme('default');
   }
 
   private applyBaseVariables() {
