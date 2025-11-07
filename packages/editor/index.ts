@@ -1,43 +1,5 @@
 import ClassHandler from './classesApplier';
 
-function setClasses() {
-  let styles = document.querySelector('style');
-  if (!styles) {
-    styles = document.createElement('style');
-  }
-
-  // Fixed classes
-  const div_line = `.vertical-division-line {align-self: stretch; border-right: 1px solid #aaafff}`;
-
-  // Dynamic Classes
-  const virtualization_wrapper = `.virtualization_wrapper { position: relative; width: 100%; }  .virtualization_wrapper * { margin: 0; padding: 0; box-sizing: border-box; }`;
-  const sticky_content_wrapper = `.sticky_content_wrapper { position: sticky; top: 0;left: 0; background-color: #121212; width: 100%; overflow: hidden; font-size: 15px; display: flex; flex-direction: row; gap: 0; font-family: monospace;} 
-  .sticky_content_wrapper > div { padding: 4px 4px; display: flex; flex-direction: column; gap: 4px; align-self: stretch; align-items: flex-start; justify-content: flex-start;  }`;
-
-  const numberContainerClass = `.number-container-container { align-items: center; min-width: 40px; max-width: 60px; text-align: right; }`;
-  const number_span =
-    '.number_span { color: #88bbff; width: 100%; display: block; }';
-  const dummy_number_span = `.dummy_number_span {opacity: 0; position: absolute; top: 0; left: 0;}`;
-
-  const editorContainerClass = `.editor-container-class { flex: 1; color: white; }`;
-  const code_line = `.code-line { width: 100%; cursor: text; transition: all 0.05s;} .code-line:hover {background-color: #151515}`;
-
-  styles.innerHTML += virtualization_wrapper;
-
-  styles.innerHTML += sticky_content_wrapper;
-
-  styles.innerHTML += numberContainerClass;
-  styles.innerHTML += number_span;
-  styles.innerHTML += dummy_number_span;
-
-  styles.innerHTML += div_line;
-
-  styles.innerHTML += editorContainerClass;
-  styles.innerHTML += code_line;
-
-  document.querySelector('head')?.insertAdjacentElement('beforeend', styles);
-}
-
 class Editor {
   // Properties
   lineHeight: number = 0;
@@ -54,32 +16,67 @@ class Editor {
   numberSpanElements: HTMLSpanElement[] = [];
   virtualization_container: HTMLDivElement | null;
 
+  // Element Classes
+  virtualizationWrapperClass: string;
+  stickyContainerClass: string;
+  numberContainerClass: string;
+  codeContainerClass: string;
+  numberSpanClass: string;
+  codeLineClass: string;
+  codeSpanClass: string;
+  verticalDivideClass: string;
+
+  private generateClassSuffix(length: number = 8): string {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    const bytes = new Uint8Array(length);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join('');
+  }
+
+  private createClassName(base: string): string {
+    return `${base}-${this.generateClassSuffix()}`;
+  }
+
   constructor(parentId: string, getCode: (code: string) => void) {
     this.parentId = parentId;
     this.virtualization_container = null;
+
+    // Generate unique classes for all elements
+  this.virtualizationWrapperClass = this.createClassName('virtualization-wrapper');
+  this.stickyContainerClass = this.createClassName('sticky-container');
+  this.numberContainerClass = this.createClassName('number-container');
+  this.codeContainerClass = this.createClassName('code-container');
+  this.numberSpanClass = this.createClassName('number-span');
+  this.codeLineClass = this.createClassName('code-line');
+  this.codeSpanClass = this.createClassName('code-span');
+  this.verticalDivideClass = this.createClassName('vertical-divide');
   }
 
   initialize() {
-    setClasses();
-
     this.virtualization_container = document.createElement('div');
     this.virtualization_container.classList.add('virtualization_wrapper');
+    this.virtualization_container.classList.add(this.virtualizationWrapperClass);
 
     const sticky_content_wrapper = document.createElement('div');
     sticky_content_wrapper.classList.add('sticky_content_wrapper');
+    sticky_content_wrapper.classList.add(this.stickyContainerClass);
 
     const number_div = document.createElement('div');
     number_div.classList.add('number-container-container');
+    number_div.classList.add(this.numberContainerClass);
 
     const dummy_number_span = document.createElement('span');
-    dummy_number_span.innerText += '1';
     dummy_number_span.classList.add('number_span', 'dummy_number_span');
+    dummy_number_span.classList.add(this.numberSpanClass);
+    dummy_number_span.innerText += '1';
 
     const div_line = document.createElement('div');
     div_line.classList.add('vertical-division-line');
+    div_line.classList.add(this.verticalDivideClass);
 
     const code_div = document.createElement('div');
     code_div.classList.add('editor-container-class');
+    code_div.classList.add(this.codeContainerClass);
 
     this.virtualization_container.insertAdjacentElement(
       'beforeend',
@@ -138,14 +135,16 @@ class Editor {
     number_div.removeChild(dummy_number_span);
 
     for (let i = 1; i <= Math.round(this.totalLinesInView); i += 1) {
-      const code_line_div = document.createElement('div');
-      const span = document.createElement('span');
+    const code_line_div = document.createElement('div');
+    const span = document.createElement('span');
 
-      span.classList.add('number_span');
-      span.style.height = dummySpanHeightStr;
-      span.style.lineHeight = dummySpanHeightStr;
+    span.classList.add('number_span');
+    span.classList.add(this.numberSpanClass);
+    span.style.height = dummySpanHeightStr;
+    span.style.lineHeight = dummySpanHeightStr;
 
-      code_line_div.classList.add('code-line');
+    code_line_div.classList.add('code-line');
+    code_line_div.classList.add(this.codeLineClass);
       code_line_div.style.height = dummySpanHeightStr;
       code_line_div.style.lineHeight = dummySpanHeightStr;
       code_line_div.innerHTML = `<span>height</span>`;
@@ -201,7 +200,18 @@ class Editor {
 
 function initEditor(parentId: string) {
   const editor = new Editor(parentId, (code: string) => {});
-  const classhandler = new ClassHandler();
+  const classhandler = new ClassHandler(
+    editor.virtualizationWrapperClass,
+    editor.stickyContainerClass,
+    editor.numberContainerClass,
+    editor.codeContainerClass,
+    editor.numberSpanClass,
+    editor.codeLineClass,
+    editor.codeSpanClass,
+    editor.verticalDivideClass
+  );
+
+  classhandler.applyTheme('default');
 
   editor.initialize();
   editor.updateNumbers(1);

@@ -58,39 +58,38 @@ class ClassHandler {
   private sessionUUID: string;
 
   // Style and theme Related properties
-  private stylesHTMLElement: HTMLStyleElement;
   private AllowedThemeVariables: Set<string>;
   private CSSVariables: Record<string, Record<string, string>>;
   private CSS_StylesRecord: Record<string, Record<string, string>>;
 
-  // Elements in Code Structure, their IDs
-  private VirtulizationWrapperID: string;
-  private StickyContainerID: string;
-  private NumberContainerID: string;
-  private CodeContainerID: string;
-  private NumberSpanID: string;
-  private CodeLineID: string;
-  private CodeSpanID: string;
-  private VerticalDivideID: string;
+  // Elements in Code Structure, their Classes
+  private VirtulizationWrapperClass: string;
+  private StickyContainerClass: string;
+  private NumberContainerClass: string;
+  private CodeContainerClass: string;
+  private NumberSpanClass: string;
+  private CodeLineClass: string;
+  private CodeSpanClass: string;
+  private VerticalDivideClass: string;
 
   constructor(
-    VirtulizationWrapperID: string,
-    StickyContainerID: string,
-    NumberContainerID: string,
-    CodeContainerID: string,
-    NumberSpanID: string,
-    CodeLineID: string,
-    CodeSpanID: string,
-    VerticalDivideID: string
+    VirtulizationWrapperClass: string,
+    StickyContainerClass: string,
+    NumberContainerClass: string,
+    CodeContainerClass: string,
+    NumberSpanClass: string,
+    CodeLineClass: string,
+    CodeSpanClass: string,
+    VerticalDivideClass: string
   ) {
-    this.VirtulizationWrapperID = VirtulizationWrapperID;
-    this.StickyContainerID = StickyContainerID;
-    this.NumberContainerID = NumberContainerID;
-    this.CodeContainerID = CodeContainerID;
-    this.NumberSpanID = NumberSpanID;
-    this.CodeLineID = CodeLineID;
-    this.CodeSpanID = CodeSpanID;
-    this.VerticalDivideID = VerticalDivideID;
+    this.VirtulizationWrapperClass = VirtulizationWrapperClass;
+    this.StickyContainerClass = StickyContainerClass;
+    this.NumberContainerClass = NumberContainerClass;
+    this.CodeContainerClass = CodeContainerClass;
+    this.NumberSpanClass = NumberSpanClass;
+    this.CodeLineClass = CodeLineClass;
+    this.CodeSpanClass = CodeSpanClass;
+    this.VerticalDivideClass = VerticalDivideClass;
 
     this.VirtulizationWrapperClasses = '';
     this.StickyContainerClasses = '';
@@ -101,7 +100,7 @@ class ClassHandler {
     this.CodeSpanClasses = '';
     this.VerticalDivideClasses = '';
 
-    this.sessionUUID = new Date().toString();
+    this.sessionUUID = crypto.randomUUID().toString();
 
     this.AllowedThemeVariables = new Set([
       `--${this.sessionUUID}-bg-color`,
@@ -129,19 +128,101 @@ class ClassHandler {
       },
     };
 
-    let tempStyles = document.querySelector('style');
-
-    if (tempStyles) {
-      this.stylesHTMLElement = tempStyles;
-    } else {
-      this.stylesHTMLElement = document.createElement('style');
-    }
-
     this.CSS_StylesRecord = {
-      [this.VirtulizationWrapperID]: {
+      // VirtulizationWrapper
+      [`.${this.VirtulizationWrapperClass}`]: {
         position: 'relative',
+        width: '100%',
+      },
+      [`.${this.VirtulizationWrapperClass} *`]: {
+        margin: '0',
+        padding: '0',
+        'box-sizing': 'border-box',
+      },
+
+      // StickyContainer
+      [`.${this.StickyContainerClass}`]: {
+        position: 'sticky',
+        top: '0',
+        left: '0',
+        'background-color': `var(--${this.sessionUUID}-bg-color)`,
+        width: '100%',
+        overflow: 'hidden',
+        'font-size': `var(--${this.sessionUUID}-font-size)`,
+        display: 'flex',
+        'flex-direction': 'row',
+        gap: `var(--${this.sessionUUID}-gap)`,
+        'font-family': `var(--${this.sessionUUID}-font-family)`,
+      },
+      [`.${this.StickyContainerClass} > div`]: {
+        padding: `var(--${this.sessionUUID}-padding)`,
+        display: 'flex',
+        'flex-direction': 'column',
+        gap: `var(--${this.sessionUUID}-gap)`,
+        'align-self': 'stretch',
+        'align-items': 'flex-start',
+        'justify-content': 'flex-start',
+      },
+      // NumberContainer
+      [`.${this.NumberContainerClass}`]: {
+        'align-items': 'center',
+        'min-width': '40px',
+        'max-width': '60px',
+        'text-align': 'right',
+      },
+
+      // CodeContainer
+      [`.${this.CodeContainerClass}`]: {
+        flex: '1',
+        color: 'white',
+      },
+
+      // NumberSpan (class selector for multiple elements)
+      [`.${this.NumberSpanClass}`]: {
+        color: `var(--${this.sessionUUID}-line-number-color)`,
+        width: '100%',
+        display: 'block',
+      },
+
+      // CodeLine (class selector for multiple elements)
+      [`.${this.CodeLineClass}`]: {
+        width: '100%',
+        cursor: 'text',
+        transition: `all var(--${this.sessionUUID}-line-transition-time)`,
+      },
+      [`.${this.CodeLineClass}:hover`]: {
+        'background-color': `var(--${this.sessionUUID}-line-hover-bg-color)`,
+      },
+      // VerticalDivide
+      [`.${this.VerticalDivideClass}`]: {
+        'align-self': 'stretch',
+        'border-right': `1px solid var(--${this.sessionUUID}-vertical-divide-border)`,
       },
     };
+
+    this.applyBaseVariables();
+  }
+
+  private applyBaseVariables() {
+    const styles = document.createElement('style');
+    styles.setAttribute('data-session-id', this.sessionUUID);
+    styles.setAttribute('data-type', 'base-styles');
+
+    let cssText = '';
+
+    // Loop over CSS_StylesRecord and create CSS rules
+    for (const [selector, properties] of Object.entries(
+      this.CSS_StylesRecord
+    )) {
+      cssText += `${selector} {\n`;
+      for (const [property, value] of Object.entries(properties)) {
+        cssText += `  ${property}: ${value};\n`;
+      }
+      cssText += '}\n\n';
+    }
+
+    styles.textContent = cssText;
+    document.querySelector('head')?.appendChild(styles);
   }
 
   applyTheme(ThemeName: string) {
@@ -151,6 +232,30 @@ class ClassHandler {
       );
       return;
     }
+
+    // Remove old theme if exists
+    const oldTheme = document.querySelector(
+      `style[data-session-id="${this.sessionUUID}"][data-type="theme"]`
+    );
+    if (oldTheme) {
+      oldTheme.remove();
+    }
+
+    const styles = document.createElement('style');
+    styles.setAttribute('data-session-id', this.sessionUUID);
+    styles.setAttribute('data-type', 'theme');
+    styles.setAttribute('data-theme-name', ThemeName);
+
+    // Add CSS variables to :root
+    let cssText = ':root {\n';
+    const themeVariables = this.CSSVariables[ThemeName];
+    for (const [varName, varValue] of Object.entries(themeVariables)) {
+      cssText += `  ${varName}: ${varValue};\n`;
+    }
+    cssText += '}\n';
+
+    styles.textContent = cssText;
+    document.querySelector('head')?.appendChild(styles);
   }
 }
 
