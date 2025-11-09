@@ -1,0 +1,44 @@
+
+GLSL (OpenGL Shading Language) includes various keywords that define its syntax and functionality. These keywords can be broadly categorized as follows:
+1. Data Types:
+
+    Scalar types:
+    void, bool, int, uint, float, double
+    Vector types:
+    bvec2, bvec3, bvec4, ivec2, ivec3, ivec4, uvec2, uvec3, uvec4, vec2, vec3, vec4, dvec2, dvec3, dvec4
+    Matrix types:
+    mat2, mat3, mat4, mat2x3, mat2x4, mat3x2, mat3x4, mat4x2, mat4x3, dmat2, dmat3, dmat4, dmat2x3, dmat2x4, dmat3x2, dmat3x4, dmat4x2, dmat4x3
+    Sampler types:
+    sampler1D, sampler2D, sampler3D, samplerCube, sampler2DArray, etc. (various sampler types for different texture dimensions and configurations) 
+
+2. Storage Qualifiers:
+
+    const: Declares a compile-time constant or a read-only parameter.
+    attribute: (Legacy GLSL) Used for per-vertex data passed from the application to the vertex shader. Replaced by in in modern GLSL.
+    uniform: Declares variables whose values are consistent across all vertices or fragments within a draw call, passed from the application.
+    varying: (Legacy GLSL) Used for interpolated data passed from the vertex shader to the fragment shader. Replaced by in and out in modern GLSL.
+    in: Declares input variables to a shader stage.
+    out: Declares output variables from a shader stage.
+    buffer: Declares a shader storage buffer object.
+    shared: Declares a variable shared within a workgroup in compute shaders.
+    coherent, volatile, restrict, readonly, writeonly: Memory access qualifiers. 
+
+3. Control Flow:
+
+    if, else, switch, case, default: Conditional statements.
+    for, while, do: Loop constructs.
+    break, continue, return, discard: Flow control statements. 
+
+4. Other Keywords:
+
+    struct: Defines a structure.
+    layout: Specifies explicit locations for input/output variables, uniform blocks, etc.
+    precision: Specifies the precision of floating-point variables (e.g., highp, mediump, lowp).
+    invariant: Ensures that an expression evaluates to the same value across different compilation units.
+    smooth, flat, noperspective: Interpolation qualifiers for varying variables.
+    subroutine: Declares a subroutine.
+    asm: (Deprecated) Assembly language extension.
+    __FILE__, __LINE__: Preprocessor macros providing file and line information.
+    Preprocessor directives: #define, #undef, #if, #ifdef, #ifndef, #else, #elif, #endif, #error, #pragma, #extension, #version, #line. 
+
+This list provides a comprehensive overview of the core keywords found in GLSL. Specific versions of GLSL and extensions may introduce additional keywords.

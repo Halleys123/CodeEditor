@@ -1,0 +1,510 @@
+{
+  "meta": {
+    "language_id": "glsl",
+    "version": "1.0.0",
+    "file_extensions": [".glsl", ".frag", ".vert"],
+    "is_compiled": true,
+    "compiler_settings": {},
+    "display_name": "GLSL",
+    "token_classes": [
+      "comment",
+      "string",
+      "number",
+      "keyword",
+      "operator",
+      "identifier",
+      "whitespace"
+    ],
+    "broader_classifications": {
+      "keyword": {
+        "data_types": [
+          "scalar_type",
+          "vector_type",
+          "matrix_type",
+          "sampler_type"
+        ],
+        "storage_qualifiers": [""],
+        "control_flow": ["conditionals", "loops", "flow_control"],
+        "misc": ["precision_types", "interpolation_types"],
+        "preprocessor": ["conditional", "macro", "misc"]
+      }
+    }
+  },
+  "keyword": {
+    "void": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "scalar_type"
+    },
+    "bool": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "scalar_type"
+    },
+    "int": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "scalar_type"
+    },
+    "uint": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "scalar_type"
+    },
+    "float": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "scalar_type"
+    },
+    "double": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "scalar_type"
+    },
+    "vec2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "vec3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "vec4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "bvec2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "bvec3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "bvec4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "dvec2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "dvec3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "dvec4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "ivec2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "ivec3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "ivec4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "uvec2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "uvec3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "uvec4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "vector_type"
+    },
+    "mat2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "mat3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "mat4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "mat2x3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "mat3x2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "mat2x4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "mat4x2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "mat3x4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "mat4x3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "dmat2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "dmat3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "dmat4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "dmat2x3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "dmat3x4": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "dmat4x3": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "dmat3x2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "dmat4x2": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "matrix_type"
+    },
+    "sampler1D": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "sampler_type"
+    },
+    "sampler2D": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "sampler_type"
+    },
+    "sampler3D": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "sampler_type"
+    },
+    "samplerCube": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "sampler_type"
+    },
+    "sampler2DArray": {
+      "classification": "keyword",
+      "type": "data_types",
+      "sub_type": "sampler_type"
+    },
+    "const": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "uniform": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "attribute": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "varying": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "in": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "out": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "buffer": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "shared": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "coherent": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "volatile": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "restrict": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "readonly": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "writeonly": {
+      "classification": "keyword",
+      "type": "storage_qualifiers",
+      "sub_type": ""
+    },
+    "if": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "conditionals"
+    },
+    "else": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "conditionals"
+    },
+    "switch": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "conditionals"
+    },
+    "case": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "conditionals"
+    },
+    "for": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "loops"
+    },
+    "while": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "loops"
+    },
+    "do": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "loops"
+    },
+    "break": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "flow_control"
+    },
+    "continue": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "flow_control"
+    },
+    "return": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "flow_control"
+    },
+    "discard": {
+      "classification": "keyword",
+      "type": "control_flow",
+      "sub_type": "flow_control"
+    },
+    "struct": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": ""
+    },
+    "void main": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": ""
+    },
+    "layout": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": ""
+    },
+    "precision": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": ""
+    },
+    "highp": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": "precision_types"
+    },
+    "mediump": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": "precision_types"
+    },
+    "lowp": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": "precision_types"
+    },
+    "invariant": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": ""
+    },
+    "smooth": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": "interpolation_types"
+    },
+    "flat": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": "interpolation_types"
+    },
+    "noperspective": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": "interpolation_types"
+    },
+    "subroutine": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": ""
+    },
+    "asm": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": ""
+    },
+    "__FILE__": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": ""
+    },
+    "__LINE__": {
+      "classification": "keyword",
+      "type": "misc",
+      "sub_type": ""
+    },
+    "#define": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "macro"
+    },
+    "#undef": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "macro"
+    },
+    "#ifdef": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "conditional"
+    },
+    "#ifndef": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "conditional"
+    },
+    "#else": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "conditional"
+    },
+    "#if": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "conditional"
+    },
+    "#elif": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "conditional"
+    },
+    "#endif": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "conditional"
+    },
+    "#error": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "misc"
+    },
+    "#pragma": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "misc"
+    },
+    "#version": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "misc"
+    },
+    "#extension": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "misc"
+    },
+    "#line": {
+      "classification": "keyword",
+      "type": "preprocessor",
+      "sub_type": "misc"
+    }
+  }
+}
